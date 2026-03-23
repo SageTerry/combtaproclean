@@ -18,7 +18,7 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
-        barlow: ['"Barlow Condensed"', 'Impact', 'sans-serif'],
+        ops: ['"Black Ops One"', 'Impact', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

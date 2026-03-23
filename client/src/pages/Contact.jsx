@@ -1,6 +1,17 @@
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Phone, Mail, MapPin, MessageCircle, Send, CheckCircle2 } from 'lucide-react'
+import { Phone, Mail, MapPin, MessageCircle, Send, CheckCircle2, Loader2 } from 'lucide-react'
+import emailjs from '@emailjs/browser'
+
+// ─── EmailJS Configuration ────────────────────────────────────────────────────
+// 1. Sign up at https://emailjs.com
+// 2. Add Gmail as a service (Service ID below)
+// 3. Create an email template (Template ID below)
+// 4. Copy your Public Key from Account → API Keys
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID'   // e.g. 'service_abc123'
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID'  // e.g. 'template_xyz789'
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY'   // e.g. 'aBcDeFgHiJkLmNoP'
+// ─────────────────────────────────────────────────────────────────────────────
 
 const services = [
   'Premium Full Service',
@@ -51,6 +62,8 @@ export default function Contact() {
     city: '',
   })
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [emailError, setEmailError] = useState(false)
 
   const ref = useRef(null)
   const inView = useInView(ref, { once: true })
@@ -59,19 +72,34 @@ export default function Contact() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Build WhatsApp message
-    const msg = `Hi Combat Pro Clean!%0A%0A*New Booking Request*%0A%0A` +
-      `Name: ${form.name}%0A` +
-      `Service: ${form.service}%0A` +
-      `Vehicle: ${form.vehicle}%0A` +
-      `Date: ${form.date}%0A` +
-      `Phone: ${form.phone}%0A` +
-      `Address: ${form.address}%0A` +
-      `City: ${form.city}%0A` +
-      (form.notes ? `Notes: ${form.notes}` : '')
-    window.open(`https://wa.me/27610244139?text=${msg}`, '_blank')
+    setSending(true)
+    setEmailError(false)
+
+    // Send email via EmailJS (Gmail)
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: form.name,
+          service:   form.service,
+          vehicle:   form.vehicle,
+          date:      form.date,
+          phone:     form.phone,
+          address:   form.address,
+          city:      form.city,
+          notes:     form.notes || 'None',
+        },
+        EMAILJS_PUBLIC_KEY
+      )
+    } catch (err) {
+      console.error('EmailJS error:', err)
+      setEmailError(true)
+    }
+
+    setSending(false)
     setSubmitted(true)
   }
 
@@ -181,11 +209,11 @@ export default function Contact() {
               >
                 <CheckCircle2 size={56} className="text-green-400 mx-auto mb-4" />
                 <h3 className="font-display text-2xl font-bold text-white mb-2">
-                  WhatsApp Opened!
+                  Booking Received!
                 </h3>
                 <p className="text-white/60">
-                  Your booking details have been pre-filled in WhatsApp.
-                  Just hit send and we'll confirm your slot.
+                  Your booking request has been emailed to the team.
+                  We'll be in touch to confirm your slot.
                 </p>
               </motion.div>
             ) : (
@@ -313,13 +341,23 @@ export default function Contact() {
                   />
                 </div>
 
-                <button type="submit" className="btn-primary w-full justify-center py-4 text-base">
-                  <Send size={18} />
-                  Send Booking via WhatsApp
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="btn-primary w-full justify-center py-4 text-base disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {sending ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                  {sending ? 'Sending...' : 'Send Booking Request'}
                 </button>
 
+                {emailError && (
+                  <p className="text-xs text-yellow-400/80 text-center">
+                    Email delivery failed. Please contact us directly via WhatsApp or phone.
+                  </p>
+                )}
+
                 <p className="text-xs text-white/40 text-center">
-                  Clicking the button will open WhatsApp with your details pre-filled.
+                  Your booking request will be emailed directly to the team.
                 </p>
               </form>
             )}

@@ -46,7 +46,7 @@ export default function Navbar() {
             alt="Combat Pro Clean"
             className="h-16 w-auto object-contain"
           />
-          <span className="font-barlow font-extrabold text-2xl tracking-wide text-gradient hidden sm:block">
+          <span className="font-ops text-xl tracking-wider text-white hidden sm:block">
             Combat Pro Clean
           </span>
         </Link>

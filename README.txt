@@ -280,25 +280,71 @@ information changes, update the files listed next to each item.
 
 
 ================================================================================
-SECTION 8: NO BACKEND REQUIRED
+SECTION 8: FORM SUBMISSION — EMAIL (via EmailJS)
 ================================================================================
 
-This site has NO backend, NO database, and NO server-side code.
+When a visitor submits the booking form, an email is sent directly to the
+business Gmail inbox via EmailJS. No backend server is required — EmailJS
+sends the email from the visitor's browser using your Gmail account as the
+delivery service.
 
-The booking form works by:
-  1. Collecting the user's form inputs (name, service, date, etc.)
-  2. Building a pre-filled WhatsApp message string
-  3. Opening https://wa.me/[number]?text=[message] in a new tab
-  4. The client receives the booking request directly in WhatsApp
+--- EMAILJS SETUP (REQUIRED before the email feature works) ---
 
-This means:
-  - No form submissions are stored anywhere
-  - No email server configuration is needed
-  - No API keys or environment variables are required
-  - The site can be hosted entirely on free static hosting (Netlify, Vercel, etc.)
+The form code already has EmailJS integrated. You only need to fill in 3
+credentials in: client/src/pages/Contact.jsx (lines 10-12)
 
-If a backend (email notifications, booking database, CMS) is required in the
-future, contact Zimatik Digital Systems to scope the upgrade.
+  EMAILJS_SERVICE_ID   ← Your EmailJS Gmail service ID
+  EMAILJS_TEMPLATE_ID  ← Your EmailJS template ID
+  EMAILJS_PUBLIC_KEY   ← Your EmailJS public/user key
+
+Follow these steps to get those values:
+
+  Step 1 — Create a free account at https://emailjs.com
+
+  Step 2 — Add Gmail as an Email Service:
+    - Dashboard → Email Services → Add New Service
+    - Choose Gmail → sign in with the business Gmail account
+    - Name the service (e.g. "combatproclean_gmail")
+    - Copy the Service ID (e.g. service_abc1234)
+
+  Step 3 — Create an Email Template:
+    - Dashboard → Email Templates → Create New Template
+    - Set "To Email" to the business Gmail address
+    - Set "Subject" to:  New Booking Request — {{from_name}}
+    - Set the body to include these variables (copy as-is):
+
+        New booking received from the website:
+
+        Name:    {{from_name}}
+        Service: {{service}}
+        Vehicle: {{vehicle}}
+        Date:    {{date}}
+        Phone:   {{phone}}
+        Address: {{address}}
+        City:    {{city}}
+        Notes:   {{notes}}
+
+    - Save the template and copy the Template ID (e.g. template_xyz7890)
+
+  Step 4 — Get your Public Key:
+    - Dashboard → Account → API Keys
+    - Copy the Public Key (e.g. aBcDeFgHiJkLmNoP1234)
+
+  Step 5 — Paste all three values into Contact.jsx lines 10-12, then rebuild:
+    npm run build
+
+--- FREE TIER LIMITS ---
+
+  EmailJS free plan: 200 emails/month, 2 templates, 1 email service
+  For higher volume, paid plans start at ~$15/month.
+  See: https://emailjs.com/pricing
+
+--- IF EMAIL FAILS ---
+
+  If EmailJS fails (network error, quota exceeded), a yellow warning message
+  is shown to the visitor advising them to contact the business directly via
+  WhatsApp or phone. The booking details remain visible in the form so the
+  visitor can copy and send them manually.
 
 
 ================================================================================
@@ -307,7 +353,7 @@ SECTION 9: FONTS USED
 
 All fonts are loaded from Google Fonts (requires internet connection to render):
 
-  Barlow Condensed (700, 800)    ← Brand name / logo text in navbar
+  Black Ops One                  ← Brand name / logo text in navbar
   Plus Jakarta Sans (400–800)    ← Section headings and subheadings
   Inter (300–700)                ← Body text, labels, paragraphs
 
