@@ -61,7 +61,7 @@ export default function Maintenance() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Perks */}
           <div className="grid sm:grid-cols-2 gap-5">
             {perks.map((perk, i) => (
@@ -83,8 +83,8 @@ export default function Maintenance() {
 
           {/* Who it's for */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            initial={{ opacity: 0, y: 24 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="card border-brand-blue/20 bg-gradient-to-br from-brand-blue/10 to-sky-500/5 mb-6">
@@ -100,10 +100,26 @@ export default function Maintenance() {
             </div>
 
             <div className="card bg-brand-blue/5 border-brand-blue/20">
-              <p className="text-white/70 text-sm leading-relaxed mb-4">
+              <p className="text-white/70 text-sm leading-relaxed mb-5">
                 Join the maintenance program today and lock in your monthly slot.
                 We'll take care of everything — you just enjoy a clean car every time.
               </p>
+
+              {/* Monthly pricing by vehicle */}
+              <div className="grid grid-cols-3 gap-2 mb-5">
+                {[
+                  { label: 'Sedan', price: 'R450' },
+                  { label: 'SUV',   price: 'R500' },
+                  { label: 'Bakkie',price: 'R550' },
+                ].map(({ label, price }) => (
+                  <div key={label} className="bg-white/5 border border-white/10 rounded-xl py-3 text-center">
+                    <p className="text-brand-blue font-bold text-lg">{price}</p>
+                    <p className="text-white/40 text-xs mt-0.5">{label} / mo</p>
+                  </div>
+                ))}
+              </div>
+              <p className="text-white/35 text-xs text-center mb-5">Hatchback priced same as Sedan</p>
+
               <Link to="/contact" className="btn-primary w-full justify-center">
                 Join the Program <ArrowRight size={18} />
               </Link>

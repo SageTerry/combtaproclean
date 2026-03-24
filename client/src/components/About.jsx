@@ -1,12 +1,13 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const stats = [
-  { value: '2',   label: 'Cities Served',    suffix: '' },
-  { value: '90',  label: 'Min Full Service',  suffix: 'min' },
-  { value: '5',   label: 'Star Rated',        suffix: '★' },
-  { value: '100', label: 'Happy Clients',     suffix: '+' },
+  { value: '2',   label: 'Cities Served',   suffix: '' },
+  { value: '90',  label: 'Min Full Service', suffix: 'min' },
+  { value: '5',   label: 'Star Rated',       suffix: '★' },
+  { value: '100', label: 'Happy Clients',    suffix: '+' },
 ]
 
 const points = [
@@ -24,7 +25,7 @@ export default function About() {
   return (
     <section id="about" className="py-24 bg-brand-slate border-t border-white/[0.06]">
       <div className="max-w-6xl mx-auto px-4">
-        <div ref={ref} className="grid lg:grid-cols-2 gap-16 items-center">
+        <div ref={ref} className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
           {/* Left — text */}
           <div>
@@ -63,7 +64,7 @@ export default function About() {
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="space-y-3"
+              className="space-y-3 mb-10"
             >
               {points.map((point, i) => (
                 <motion.li
@@ -78,33 +79,40 @@ export default function About() {
                 </motion.li>
               ))}
             </motion.ul>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.45, delay: 0.75 }}
+            >
+              <Link to="/contact" className="btn-primary">
+                Book Your Detail <ArrowRight size={18} />
+              </Link>
+            </motion.div>
           </div>
 
-          {/* Right — photo stacked above clean stats row */}
+          {/* Right — video + stats */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            initial={{ opacity: 0, y: 24 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col gap-6"
           >
-            {/* Main photo */}
-            <div className="relative rounded-2xl overflow-hidden">
-              <img
-                src="https://www.combatproclean.co.za/wp-content/uploads/2025/11/WhatsApp-Image-2025-11-11-at-16.08.04_6257664d-scaled.jpg"
-                alt="Combat Pro Clean team at work"
-                className="w-full h-80 lg:h-96 object-cover"
+            {/* Video card */}
+            <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 bg-[#0a1120] ring-1 ring-brand-blue/15">
+              <video
+                src="https://www.combatproclean.co.za/wp-content/uploads/2026/02/2vid.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                controlsList="nodownload"
+                className="w-full h-56 sm:h-72 md:h-[420px] object-cover block"
               />
-              {/* Subtle bottom gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-slate/50 via-transparent to-transparent" />
-              {/* Experience badge overlaid bottom-right of photo */}
-              <div className="absolute bottom-4 right-4 bg-brand-slate/90 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-2">
-                <p className="text-brand-blue text-xs font-semibold uppercase tracking-wider">Mobile Service</p>
-                <p className="text-white text-sm font-bold">At Your Door</p>
-              </div>
             </div>
 
-            {/* Stats row — full width, all 4 stats */}
-            <div className="grid grid-cols-4 gap-3">
+            {/* Stats row */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {stats.map((stat, i) => (
                 <motion.div
                   key={stat.label}

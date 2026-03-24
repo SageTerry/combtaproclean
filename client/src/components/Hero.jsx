@@ -66,7 +66,7 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 pt-32 pb-24 w-full">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 pt-24 md:pt-32 pb-16 md:pb-24 w-full">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
 
           {/* LEFT — text */}
@@ -89,7 +89,7 @@ export default function Hero() {
               initial="hidden"
               animate="show"
               custom={1}
-              className="font-display text-5xl md:text-6xl lg:text-7xl font-bold leading-none tracking-tight mb-6"
+              className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-none tracking-tight mb-6"
             >
               Premium Mobile{' '}
               <span className="text-gradient">Vehicle Detailing</span>{' '}

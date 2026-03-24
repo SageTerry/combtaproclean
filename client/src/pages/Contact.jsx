@@ -13,13 +13,59 @@ const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID'  // e.g. 'template_xyz789'
 const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY'   // e.g. 'aBcDeFgHiJkLmNoP'
 // ─────────────────────────────────────────────────────────────────────────────
 
-const services = [
+const MAIN_SERVICES = [
   'Premium Full Service',
-  'Standard Full Service',
+  'Full Service (Standard)',
   'Interior Deep Clean',
-  'Exterior Wash',
-  'Engine Bay Wash',
+  'Exterior Wash & Dry',
 ]
+
+const ADDON_SERVICES = [
+  'Engine Bay Wash',
+  'Headlight Restoration',
+  'Deep Seat Extraction',
+  'Ceramic Spray Sealant',
+  'Leather Conditioning & Protection',
+  'Pet Hair Removal',
+  'Ozone Odour Treatment',
+  'Interior Fabric Protection',
+  'Roof Lining Restoration',
+]
+
+const PRICING = {
+  'Cape Town': {
+    'Premium Full Service':    { sedan: 750,  suv: 850,  bakkie: 950  },
+    'Full Service (Standard)': { sedan: 550,  suv: 680,  bakkie: 780  },
+    'Interior Deep Clean':     { sedan: 480,  suv: 550,  bakkie: 650  },
+    'Exterior Wash & Dry':     { sedan: 300,  suv: 380,  bakkie: 480  },
+  },
+  'Johannesburg': {
+    'Premium Full Service':    { sedan: 850,  suv: 950,  bakkie: 1050 },
+    'Full Service (Standard)': { sedan: 650,  suv: 780,  bakkie: 880  },
+    'Interior Deep Clean':     { sedan: 530,  suv: 600,  bakkie: 700  },
+    'Exterior Wash & Dry':     { sedan: 350,  suv: 430,  bakkie: 530  },
+  },
+}
+
+const ADDON_PRICES = {
+  'Engine Bay Wash': 350,
+  'Headlight Restoration': 350,
+  'Deep Seat Extraction': 400,
+  'Ceramic Spray Sealant': 450,
+  'Leather Conditioning & Protection': 300,
+  'Pet Hair Removal': 350,
+  'Ozone Odour Treatment': 500,
+  'Interior Fabric Protection': 300,
+  'Roof Lining Restoration': 250,
+}
+
+function getPrice(service, vehicle, city) {
+  if (!service) return null
+  if (ADDON_PRICES[service] !== undefined) return ADDON_PRICES[service]
+  if (!vehicle || !city || !PRICING[city]?.[service]) return null
+  const vKey = vehicle === 'S.U.V' ? 'suv' : vehicle === 'Bakkie' ? 'bakkie' : 'sedan'
+  return PRICING[city][service][vKey]
+}
 
 const vehicles = ['Sedan', 'S.U.V', 'Hatchback', 'Bakkie']
 
@@ -248,9 +294,16 @@ export default function Contact() {
                       className="w-full bg-brand-slate border border-white/10 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-blue transition-colors"
                     >
                       <option value="">Select service</option>
-                      {services.map((s) => (
-                        <option key={s} value={s}>{s}</option>
-                      ))}
+                      <optgroup label="Main Services">
+                        {MAIN_SERVICES.map((s) => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Elite Add-Ons">
+                        {ADDON_SERVICES.map((s) => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </optgroup>
                     </select>
                   </div>
                   <div>
@@ -269,6 +322,23 @@ export default function Contact() {
                     </select>
                   </div>
                 </div>
+
+                {/* Price preview */}
+                {(() => {
+                  const price = getPrice(form.service, form.vehicle, form.city)
+                  if (price === null) return null
+                  const isAddon = ADDON_PRICES[form.service] !== undefined
+                  return (
+                    <p className="text-brand-blue text-sm font-semibold -mt-1">
+                      Estimated price: R{price}
+                      {isAddon && (
+                        <span className="text-white/40 font-normal ml-1">
+                          (flat rate — all vehicle types)
+                        </span>
+                      )}
+                    </p>
+                  )
+                })()}
 
                 {/* Date + City */}
                 <div className="grid sm:grid-cols-2 gap-4">

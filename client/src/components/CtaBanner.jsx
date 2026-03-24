@@ -35,7 +35,7 @@ export default function CtaBanner() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.55, delay: 0.1 }}
-          className="font-display text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
+          className="font-display text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-6 leading-tight"
         >
           Your Car Deserves Better
           <br />Than a Rushed Car Wash.
@@ -45,7 +45,7 @@ export default function CtaBanner() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-white/70 text-lg mb-10 max-w-xl mx-auto"
+          className="text-white/70 text-base sm:text-lg mb-10 max-w-xl mx-auto"
         >
           Book a professional mobile detail — we come to you in Cape Town or
           Johannesburg. No queues, no rushing.
@@ -59,7 +59,7 @@ export default function CtaBanner() {
         >
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 bg-white text-brand-blue hover:bg-white/90 font-bold px-8 py-4 rounded-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 text-base"
+            className="inline-flex items-center gap-2 bg-white text-brand-blue hover:bg-white/90 font-bold px-5 sm:px-8 py-3 sm:py-4 rounded-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 text-sm sm:text-base"
           >
             Book Your Clean <ArrowRight size={18} />
           </Link>
@@ -67,7 +67,7 @@ export default function CtaBanner() {
             href="https://wa.me/27610244139"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold px-8 py-4 rounded-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 text-base"
+            className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold px-5 sm:px-8 py-3 sm:py-4 rounded-lg transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5 text-sm sm:text-base"
           >
             <WhatsAppIcon size={18} />
             WhatsApp Us
